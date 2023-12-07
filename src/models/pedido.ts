@@ -1,9 +1,10 @@
 export interface Pedido {
-    id: number
-    nombreC:string
-    direccion: string
-    nombreProducto: string
-    cantidad:number
-    fechaPedido: Date
-    idRepartidor : number
-  }
+  id: number
+  cantidad: number
+  total: number
+  fechaPedido: Date
+  idRepartidor: number
+  idCliente: number
+  idPlatillo: number
+  idDireccion: number
+}

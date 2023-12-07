@@ -3,6 +3,8 @@ import type { Detalle } from '@/models/detalle'
 import { onMounted, ref } from 'vue'
 import http from '@/plugins/axios'
 import router from '@/router'
+import { useAuthStore } from '@/stores/index'
+const authStore = useAuthStore()
 
 const props = defineProps<{
   //esto se copia 7-11
@@ -33,64 +35,77 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container">
-    <!--div general con bootstrap con diseño-->
-    <nav aria-label="breadcrumb">
-      <!--//clase propias de botstrap-->
-      <ol class="breadcrumb">
-        <!--//clase propias de botstrap-->
-        <li class="breadcrumb-item"><RouterLink to="/">Inicio</RouterLink></li>
-        <!--//clase propias de botstrap-->
-        <li class="breadcrumb-item active" aria-current="page">Detalle</li>
-        <!--//clase propias de botstrap-->
-      </ol>
-    </nav>
-
-    <div class="row">
-      <h2>Lista de Detalles</h2>
-      <div class="col-12">
-        <RouterLink to="/detalles/crear"
-          ><!--Enlace deswwgaer para crear-->
-          <font-awesome-icon icon="fa-solid fa-plus" />Crear Nuevo Detalle<!--implmetacion del icono-->
-        </RouterLink>
+  <br /><br /><br />
+  <div v-if="authStore.token">
+    <div class="find-us">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="section-heading">
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item">
+                    <RouterLink to="/">Inicio</RouterLink>
+                  </li>
+                  <li class="breadcrumb-item active" aria-current="page">Pedidos</li>
+                </ol>
+              </nav>
+              <h2 style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">
+                Lista de Detalles
+              </h2>
+              <div class="col-12"></div>
+            </div>
+            <RouterLink to="/detalles/crear">Crear Nuevo Detalle </RouterLink>
+          </div>
+        </div>
       </div>
     </div>
-
-    <div class="table-responsive">
-      <!--tablas propias de bottstrap-->
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th scope="col">N°</th>
-            <th scope="col">Estado de la Dirección</th>
-            <th scope="col">Puntuación</th>
-            <th scope="col">Credibilidad</th>
-            <th scope="col">Amabilidad</th>
-            <th scope="col">IdPedido</th>
-            <th scope="col">Editar/Cancelar</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(detalle, index) in detalles" :key="detalle.id">
-            <!--el singular solo es una variable-->
-            <th scope="row">{{ index + 1 }}</th>
-            <!--cuando el intex comienza en 0 le damos mas 1-->
-            <td>{{ detalle.direccionEstado }}</td>
-            <td>{{ detalle.puntuación }}</td>
-            <td>{{ detalle.credibilidad }}</td>
-            <td>{{ detalle.amabilidad }}</td>
-            <td>{{ detalle.idPedido }}</td>
-            <td>
-              <button class="btn text-success" @click="toEdit(detalle.id)">
-                <font-awesome-icon icon="fa-solid fa-edit" />
-              </button>
-              <button class="btn text-danger" @click="toDelete(detalle.id)">
-                <font-awesome-icon icon="fa-solid fa-trash" />
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <br />
+    <div class="container">
+      <div class="table-responsive">
+        <!--tablas propias de bottstrap-->
+        <table class="table table-bordered">
+          <thead>
+            <tr style="background-color: black">
+              <th scope="col" style="color: #e49e48">N°</th>
+              <th scope="col" style="color: #e49e48">Detalles en Orden</th>
+              <th scope="col" style="color: #e49e48">Nombre del Cliente</th>
+              <th scope="col" style="color: #e49e48">Fecha del Pedido</th>
+              <th scope="col" style="color: #e49e48">Estado de la Dirección</th>
+              <th scope="col" style="color: #e49e48">Puntuación</th>
+              <th scope="col" style="color: #e49e48">Credibilidad</th>
+              <th scope="col" style="color: #e49e48">Amabilidad</th>
+              <th scope="col" style="color: #e49e48">Editar/Eliminar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(detalle, index) in detalles"
+              :key="detalle.id"
+              style="background-color: black"
+            >
+              <!--el singular solo es una variable-->
+              <th scope="row" style="color: #f8cb2e">{{ index + 1 }}</th>
+              <!--cuando el intex comienza en 0 le damos mas 1-->
+              <td align="center" style="color: #f8cb2e">{{ detalle.id }}</td>
+              <td style="color: #f8cb2e">{{ detalle.clientes.nombreCliente }}</td>
+              <td style="color: #f8cb2e">{{ detalle.pedidos.fechaPedido }}</td>
+              <td style="color: #f8cb2e">{{ detalle.direccionEstado }}</td>
+              <td style="color: #f8cb2e">{{ detalle.puntuacion }}</td>
+              <td style="color: #f8cb2e">{{ detalle.credibilidad }}</td>
+              <td style="color: #f8cb2e">{{ detalle.amabilidad }}</td>
+              <td>
+                <button class="btn text-success" @click="toEdit(detalle.id)">
+                  <font-awesome-icon icon="fa-solid fa-edit" />
+                </button>
+                <button class="btn text-danger" @click="toDelete(detalle.id)">
+                  <font-awesome-icon icon="fa-solid fa-trash" />
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
